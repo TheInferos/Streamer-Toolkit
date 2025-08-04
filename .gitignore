@@ -1,3 +1,4 @@
 .idea/*
 frontend/*
 backend/README-Docker.md
+backend/README-Lombok.md
