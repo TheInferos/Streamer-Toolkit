@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class BaseController {
 
-    @GetMapping
-    @RequestMapping("/hello")
+    @GetMapping("/hello")
     public String getMessages() {
         return "Hello it's BunBun";
     }
 
-    @GetMapping
-    @RequestMapping("/status")
+    @GetMapping("/status")
     public String getStream() {
         return "Getting Milk";
     }
