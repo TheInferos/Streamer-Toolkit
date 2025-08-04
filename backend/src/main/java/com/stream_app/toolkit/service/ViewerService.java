@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 
@@ -23,6 +24,10 @@ public class ViewerService {
 
     public Viewer addViewer( Viewer viewer) {
         return viewerRepository.save(viewer);
+    }
+
+    public Viewer getViewer (UUID id) {
+        return viewerRepository.getViewer(id);
     }
 
 }

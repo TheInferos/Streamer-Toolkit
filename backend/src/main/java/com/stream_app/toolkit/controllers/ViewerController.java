@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/viewer")
+@SuppressWarnings("unused")
 public class ViewerController {
 
     private final ViewerService viewerService;
@@ -26,5 +28,10 @@ public class ViewerController {
     @PostMapping("/add")
     public Viewer addViewer(@RequestBody Viewer viewer) {
         return viewerService.addViewer(viewer);
+    }
+
+    @GetMapping("/{id}")
+    public Viewer getViewer(@PathVariable("id") UUID id) {
+        return viewerService.getViewer(id);
     }
 }
