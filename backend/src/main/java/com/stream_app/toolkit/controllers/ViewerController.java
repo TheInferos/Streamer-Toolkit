@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/viewer")
-@SuppressWarnings("unused")
 public class ViewerController {
 
     private final ViewerService viewerService;
