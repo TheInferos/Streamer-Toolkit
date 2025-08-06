@@ -1,6 +1,8 @@
 package com.stream_app.toolkit.entities;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,6 +14,11 @@ class StreamTest {
     private static FixtureMonkey FIXTURE_MONKEY = FixtureMonkey.create();
 
     private Stream stream;
+
+    @BeforeEach
+    void setUp() {
+        stream = new Stream();
+    }
 
     @Test
     void testStreamCreation() {

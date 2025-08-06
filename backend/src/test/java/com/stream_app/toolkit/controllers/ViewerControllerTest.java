@@ -1,7 +1,6 @@
-package com.stream_app.toolkit.unit.controllers;
+package com.stream_app.toolkit.controllers;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.stream_app.toolkit.controllers.ViewerController;
 import com.stream_app.toolkit.entities.Viewer;
 import com.stream_app.toolkit.service.ViewerService;
 import org.junit.jupiter.api.Test;

@@ -1,9 +1,8 @@
-package com.stream_app.toolkit.unit.service;
+package com.stream_app.toolkit.service;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.stream_app.toolkit.entities.Stream;
 import com.stream_app.toolkit.repositories.StreamRepository;
-import com.stream_app.toolkit.service.StreamService;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

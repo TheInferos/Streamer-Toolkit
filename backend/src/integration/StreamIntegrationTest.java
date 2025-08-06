@@ -69,17 +69,17 @@ class StreamIntegrationTest {
     @Test
     void testCreateMultipleStreams() throws Exception {
         // Given
-        Stream stream1 = FIXTURE_MONKEY.giveMeOne(Stream.class);
-        stream1.setId(null);
-        if (stream1.getName() == null) {
-            stream1.setName("Test Stream 1");
-        }
+        Stream stream1 = FIXTURE_MONKEY.giveMeBuilder(Stream.class)
+                .setNull("id")
+                .setNull("viewers")
+                .setNotNull("name")
+                .sample();
 
-        Stream stream2 = FIXTURE_MONKEY.giveMeOne(Stream.class);
-        stream2.setId(null);
-        if (stream2.getName() == null) {
-            stream2.setName("Test Stream 2");
-        }
+        Stream stream2 = FIXTURE_MONKEY.giveMeBuilder(Stream.class)
+                .setNull("id")
+                .setNull("viewers")
+                .setNotNull("name")
+                .sample();
 
         // When - Create multiple streams
         mockMvc.perform(post("/api/stream/add")
@@ -113,8 +113,11 @@ class StreamIntegrationTest {
     @Test
     void testCreateStreamWithComplexData() throws Exception {
         // Given
-        Stream complexStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
-        complexStream.setId(null);
+        Stream complexStream = FIXTURE_MONKEY.giveMeBuilder(Stream.class)
+                .setNull("id")
+                .setNull("viewers")
+                .setNotNull("name")
+                .sample();
         if (complexStream.getName() == null) {
             complexStream.setName("Complex Stream");
         }
@@ -134,11 +137,14 @@ class StreamIntegrationTest {
     @Test
     void testCreateStreamWithSpecificData() throws Exception {
         // Given
-        Stream specificStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+        Stream specificStream = FIXTURE_MONKEY.giveMeBuilder(Stream.class)
+                .setNull("id")
+                .setNull("viewers")
+                .setNotNull("name")
+                .sample();
         specificStream.setName("Integration Test Stream");
         specificStream.setUrl("https://twitch.tv/integration");
         specificStream.setDescription("A stream for integration testing");
-        specificStream.setId(null);
 
         // When & Then
         mockMvc.perform(post("/api/stream/add")
@@ -166,8 +172,9 @@ class StreamIntegrationTest {
         // Given
         Stream streamWithNulls = FIXTURE_MONKEY.giveMeBuilder(Stream.class)
                 .setNull("id")
+                .setNull("viewers")
                 .setNull("description")
-                .setNull("game")
+                .setNull("games")
                 .setNull("tags")
                 .setNull("categories")
                 .setNotNull("name")
@@ -187,6 +194,7 @@ class StreamIntegrationTest {
         // Given
         List<Stream> streams = FIXTURE_MONKEY.giveMeBuilder(Stream.class)
                 .setNull("id")
+                .setNull("viewers")
                 .setNotNull("name")
                 .sampleList(5);
 
@@ -211,9 +219,10 @@ class StreamIntegrationTest {
         // Given
         Stream streamWithEmptyArrays = FIXTURE_MONKEY.giveMeBuilder(Stream.class)
                 .setNull("id")
-                .set("games", new String[0])
-                .set("tags", new String[0])
-                .set("categories", new String[0])
+                .setNull("viewers")
+                .set("games", List.of())
+                .set("tags", List.of())
+                .set("categories", List.of())
                 .setNotNull("name")
                 .sample();
 

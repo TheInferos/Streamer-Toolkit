@@ -1,6 +1,8 @@
 package com.stream_app.toolkit.entities;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,6 +14,11 @@ class ViewerTest {
     private static FixtureMonkey FIXTURE_MONKEY = FixtureMonkey.create();
 
     private Viewer viewer;
+
+    @BeforeEach
+    void setUp() {
+        viewer = new Viewer();
+    }
 
     @Test
     void testViewerCreation() {
