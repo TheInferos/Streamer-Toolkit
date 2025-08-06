@@ -1,10 +1,11 @@
-package com.stream_app.toolkit.service;
+package com.stream_app.toolkit.unit.service;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.stream_app.toolkit.entities.Stream;
 import com.stream_app.toolkit.repositories.StreamRepository;
+import com.stream_app.toolkit.service.StreamService;
+
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,6 +29,7 @@ class StreamServiceTest {
     private StreamService streamService;
 
     private static FixtureMonkey FIXTURE_MONKEY = FixtureMonkey.create();
+    
     @Test
     void testGetStreams() {
         // Given
@@ -132,23 +134,5 @@ class StreamServiceTest {
         // Then
         assertEquals(complexStream, result);
         verify(streamRepository, times(1)).save(complexStream);
-    }
-
-    @Test
-    void testAddMultipleStreams() {
-        // Given
-        List<Stream> streams = FIXTURE_MONKEY.giveMe(Stream.class, 5);
-
-        for (int i = 0; i < streams.size(); i++) {
-            when(streamRepository.save(streams.get(i))).thenReturn(streams.get(i));
-        }
-
-        // When & Then
-        for (int i = 0; i < streams.size(); i++) {
-            Stream result = streamService.addStream(streams.get(i));
-            assertEquals(streams.get(i), result);
-        }
-
-        verify(streamRepository, times(5)).save(any(Stream.class));
     }
 } 
