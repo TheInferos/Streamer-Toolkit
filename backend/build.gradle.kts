@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.5.4"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("jacoco")
 }
 
 group = "com.stream_app"
@@ -33,10 +34,89 @@ dependencies {
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
+	testImplementation("com.navercorp.fixturemonkey:fixture-monkey-jackson:1.0.12")
+	testImplementation("com.h2database:h2")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	 testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+
+    // Mockito + Mockito Kotlin
+    testImplementation("org.mockito:mockito-core:5.12.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.12.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
+
+    // AssertJ
+    testImplementation("org.assertj:assertj-core:3.25.1")
+
+    // Fixture Monkey
+    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.1.9")
 
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+// Test configuration
+tasks.test {
+	finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+	dependsOn(tasks.test)
+	reports {
+		xml.required.set(true)
+		html.required.set(true)
+	}
+}
+
+// Configure existing JaCoCo coverage verification - fails build if coverage is not 100%
+tasks.jacocoTestCoverageVerification {
+	dependsOn(tasks.test)
+	violationRules {
+		rule {
+			limit {
+				counter = "LINE"
+				value = "COVEREDRATIO"
+				minimum = BigDecimal("1.0")
+			}
+		}
+		rule {
+			limit {
+				counter = "BRANCH"
+				value = "COVEREDRATIO"
+				minimum = BigDecimal("1.0")
+			}
+		}
+		rule {
+			limit {
+				counter = "CLASS"
+				value = "COVEREDRATIO"
+				minimum = BigDecimal("1.0")
+			}
+		}
+		rule {
+			limit {
+				counter = "METHOD"
+				value = "COVEREDRATIO"
+				minimum = BigDecimal("1.0")
+			}
+		}
+	}
+	classDirectories.setFrom(
+        files(classDirectories.files.map {
+            fileTree(it) {
+                exclude(
+                    "**/dto/**", 
+                    "**/config/**",
+                    "**/*Application.class",
+                    "**/generated/**"
+                )
+            }
+        })
+    )
+}
+
+tasks.test {
+	finalizedBy(tasks.jacocoTestReport, tasks.jacocoTestCoverageVerification)
 }
