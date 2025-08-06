@@ -139,17 +139,16 @@ class ViewerServiceTest {
     @Test
     void testAddMultipleViewers() {
         // Given
-        List<Viewer> viewersToSave = FIXTURE_MONKEY.giveMe(Viewer.class, 10);
-        List<Viewer> savedViewers = FIXTURE_MONKEY.giveMe(Viewer.class, 10);
+        List<Viewer> viewers = FIXTURE_MONKEY.giveMe(Viewer.class, 10);
 
-        for (int i = 0; i < viewersToSave.size(); i++) {
-            when(viewerRepository.save(viewersToSave.get(i))).thenReturn(savedViewers.get(i));
+        for (int i = 0; i < viewers.size(); i++) {
+            when(viewerRepository.save(viewers.get(i))).thenReturn(viewers.get(i));
         }
 
         // When & Then
-        for (int i = 0; i < viewersToSave.size(); i++) {
-            Viewer result = viewerService.addViewer(viewersToSave.get(i));
-            assertEquals(savedViewers.get(i), result);
+        for (int i = 0; i < viewers.size(); i++) {
+            Viewer result = viewerService.addViewer(viewers.get(i));
+            assertEquals(viewers.get(i), result);
         }
 
         verify(viewerRepository, times(10)).save(any(Viewer.class));
@@ -173,5 +172,30 @@ class ViewerServiceTest {
         assertEquals("specificuser123", result.getTwitchHandle());
         assertEquals("Specific User", result.getName());
         verify(viewerRepository, times(1)).getViewer(testId);
+    }
+
+    @Test
+    void testAddViewerWithNullViewer() {
+        // Given
+        Viewer nullViewer = null;
+        when(viewerRepository.save(null)).thenThrow(new IllegalArgumentException("Viewer cannot be null"));
+
+        // When & Then
+        assertThrows(IllegalArgumentException.class, () -> {
+            viewerService.addViewer(nullViewer);
+        });
+    }
+
+    @Test
+    void testGetViewerWithNullId() {
+        // Given
+        when(viewerRepository.getViewer(null)).thenReturn(null);
+
+        // When
+        Viewer result = viewerService.getViewer(null);
+
+        // Then
+        assertNull(result);
+        verify(viewerRepository, times(1)).getViewer(null);
     }
 }

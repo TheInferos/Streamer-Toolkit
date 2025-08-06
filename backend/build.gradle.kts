@@ -69,3 +69,54 @@ tasks.jacocoTestReport {
 		html.required.set(true)
 	}
 }
+
+// Configure existing JaCoCo coverage verification - fails build if coverage is not 100%
+tasks.jacocoTestCoverageVerification {
+	dependsOn(tasks.test)
+	violationRules {
+		rule {
+			limit {
+				counter = "LINE"
+				value = "COVEREDRATIO"
+				minimum = BigDecimal("1.0")
+			}
+		}
+		rule {
+			limit {
+				counter = "BRANCH"
+				value = "COVEREDRATIO"
+				minimum = BigDecimal("1.0")
+			}
+		}
+		rule {
+			limit {
+				counter = "CLASS"
+				value = "COVEREDRATIO"
+				minimum = BigDecimal("1.0")
+			}
+		}
+		rule {
+			limit {
+				counter = "METHOD"
+				value = "COVEREDRATIO"
+				minimum = BigDecimal("1.0")
+			}
+		}
+	}
+	classDirectories.setFrom(
+        files(classDirectories.files.map {
+            fileTree(it) {
+                exclude(
+                    "**/dto/**", 
+                    "**/config/**",
+                    "**/*Application.class",
+                    "**/generated/**"
+                )
+            }
+        })
+    )
+}
+
+tasks.test {
+	finalizedBy(tasks.jacocoTestReport, tasks.jacocoTestCoverageVerification)
+}

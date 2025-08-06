@@ -134,4 +134,29 @@ class StreamServiceTest {
         assertEquals(complexStream, result);
         verify(streamRepository, times(1)).save(complexStream);
     }
+
+    @Test
+    void testAddStreamWithNullStream() {
+        // Given
+        Stream nullStream = null;
+        when(streamRepository.save(null)).thenThrow(new IllegalArgumentException("Stream cannot be null"));
+
+        // When & Then
+        assertThrows(IllegalArgumentException.class, () -> {
+            streamService.addStream(nullStream);
+        });
+    }
+
+    @Test
+    void testGetStreamWithNullId() {
+        // Given
+        when(streamRepository.findById(null)).thenReturn(java.util.Optional.empty());
+
+        // When
+        Stream result = streamService.getStream(null);
+
+        // Then
+        assertNull(result);
+        verify(streamRepository, times(1)).findById(null);
+    }
 } 
