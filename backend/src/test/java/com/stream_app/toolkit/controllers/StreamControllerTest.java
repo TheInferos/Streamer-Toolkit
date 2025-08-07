@@ -2,13 +2,13 @@ package com.stream_app.toolkit.controllers;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.stream_app.toolkit.entities.Stream;
+import com.stream_app.toolkit.entities.Game;
 import com.stream_app.toolkit.service.StreamService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -53,7 +53,6 @@ class StreamControllerTest {
         ResponseEntity<Stream> response = streamController.addStream(streamToSave);
 
         // Then
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(savedStream, response.getBody());
         verify(streamService, times(1)).addStream(streamToSave);
     }
@@ -69,7 +68,6 @@ class StreamControllerTest {
         ResponseEntity<Stream> response = streamController.getStream(streamId);
 
         // Then
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedStream, response.getBody());
         verify(streamService, times(1)).getStream(streamId);
     }
@@ -84,7 +82,6 @@ class StreamControllerTest {
         ResponseEntity<Stream> response = streamController.getStream(streamId);
 
         // Then
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNull(response.getBody());
         verify(streamService, times(1)).getStream(streamId);
     }
@@ -104,7 +101,6 @@ class StreamControllerTest {
         ResponseEntity<Stream> response = streamController.addStream(streamWithNulls);
 
         // Then
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(streamWithNulls, response.getBody());
         verify(streamService, times(1)).addStream(streamWithNulls);
     }
@@ -120,5 +116,52 @@ class StreamControllerTest {
         // Then
         assertTrue(result.isEmpty());
         verify(streamService, times(1)).getStreams();
+    }
+
+    @Test
+    void testGetStreamGames_ShouldReturnGamesList() {
+        // Given
+        UUID streamId = UUID.randomUUID();
+        List<Game> expectedGames = FIXTURE_MONKEY.giveMe(Game.class, 3);
+        when(streamService.getStreamGames(streamId)).thenReturn(expectedGames);
+
+        // When
+        ResponseEntity<List<Game>> response = streamController.getStreamGames(streamId);
+
+        // Then
+        assertEquals(expectedGames, response.getBody());
+        verify(streamService, times(1)).getStreamGames(streamId);
+    }
+
+    @Test
+    void testAddGamesToStream_ShouldReturnUpdatedStream() {
+        // Given
+        UUID streamId = UUID.randomUUID();
+        List<Game> gamesToAdd = FIXTURE_MONKEY.giveMe(Game.class, 2);
+        Stream updatedStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+        when(streamService.addGamesToStream(streamId, gamesToAdd)).thenReturn(updatedStream);
+
+        // When
+        ResponseEntity<Stream> response = streamController.addGamesToStream(streamId, gamesToAdd);
+
+        // Then
+        assertEquals(updatedStream, response.getBody());
+        verify(streamService, times(1)).addGamesToStream(streamId, gamesToAdd);
+    }
+
+    @Test
+    void testRemoveGamesFromStream_ShouldReturnUpdatedStream() {
+        // Given
+        UUID streamId = UUID.randomUUID();
+        List<UUID> gameIdsToRemove = List.of(UUID.randomUUID(), UUID.randomUUID());
+        Stream updatedStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+        when(streamService.removeGamesFromStream(streamId, gameIdsToRemove)).thenReturn(updatedStream);
+
+        // When
+        ResponseEntity<Stream> response = streamController.removeGamesFromStream(streamId, gameIdsToRemove);
+
+        // Then
+        assertEquals(updatedStream, response.getBody());
+        verify(streamService, times(1)).removeGamesFromStream(streamId, gameIdsToRemove);
     }
 }

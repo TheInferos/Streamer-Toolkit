@@ -25,8 +25,9 @@ public class Stream {
     private String description;
     private String url;
     
-    @ElementCollection
-    private List<String> games;
+    @OneToMany
+    @JoinColumn(name = "stream_id")
+    private List<Game> games;
     
     @OneToMany
     @JoinColumn(name = "stream_id")
