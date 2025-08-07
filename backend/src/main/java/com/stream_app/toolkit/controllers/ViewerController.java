@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/viewer")
+@CrossOrigin(origins = "*")
 public class ViewerController {
 
     private final ViewerService viewerService;
