@@ -2,6 +2,7 @@ package com.stream_app.toolkit.service;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.stream_app.toolkit.entities.Stream;
+import com.stream_app.toolkit.entities.Game;
 import com.stream_app.toolkit.repositories.StreamRepository;
 
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -158,5 +160,177 @@ class StreamServiceTest {
         // Then
         assertNull(result);
         verify(streamRepository, times(1)).findById(null);
+    }
+
+    @Test
+    void testGetStreamGames_ShouldReturnGamesList() {
+        // Given
+        Stream stream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+        UUID streamId = stream.getId();
+        List<Game> expectedGames = FIXTURE_MONKEY.giveMe(Game.class, 3);
+        stream.setGames(expectedGames);
+        when(streamRepository.findById(streamId)).thenReturn(Optional.of(stream));
+
+        // When
+        List<Game> result = streamService.getStreamGames(streamId);
+
+        // Then
+        assertEquals(expectedGames, result);
+        verify(streamRepository, times(1)).findById(streamId);
+    }
+
+    @Test
+    void testGetStreamGames_ShouldReturnEmptyListWhenStreamNotFound() {
+        // Given
+        UUID streamId = UUID.randomUUID();
+        when(streamRepository.findById(streamId)).thenReturn(Optional.empty());
+
+        // When
+        List<Game> result = streamService.getStreamGames(streamId);
+
+        // Then
+        assertTrue(result.isEmpty());
+        verify(streamRepository, times(1)).findById(streamId);
+    }
+
+    @Test
+    void testGetStreamGames_ShouldReturnEmptyListWhenGamesIsNull() {
+        // Given
+        UUID streamId = UUID.randomUUID();
+        Stream stream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+        stream.setGames(null);
+        when(streamRepository.findById(streamId)).thenReturn(Optional.of(stream));
+
+        // When
+        List<Game> result = streamService.getStreamGames(streamId);
+
+        // Then
+        assertTrue(result.isEmpty());
+        verify(streamRepository, times(1)).findById(streamId);
+    }
+
+    @Test
+    void testAddGamesToStream_ShouldAddGamesToExistingStream() {
+        // Given
+        Stream existingStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+        UUID streamId = existingStream.getId();
+        List<Game> existingGames = FIXTURE_MONKEY.giveMe(Game.class, 2);
+        existingStream.setGames(existingGames);
+        
+        List<Game> newGames = FIXTURE_MONKEY.giveMe(Game.class, 2);
+        Stream updatedStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+        
+        when(streamRepository.findById(streamId)).thenReturn(Optional.of(existingStream));
+        when(streamRepository.save(any(Stream.class))).thenReturn(updatedStream);
+
+        // When
+        Stream result = streamService.addGamesToStream(streamId, newGames);
+
+        // Then
+        assertEquals(updatedStream, result);
+        verify(streamRepository, times(1)).findById(streamId);
+        verify(streamRepository, times(1)).save(existingStream);
+    }
+
+    @Test
+    void testAddGamesToStream_ShouldInitializeGamesListWhenNull() {
+        // Given
+        Stream existingStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+        UUID streamId = existingStream.getId();
+        existingStream.setGames(null);
+        
+        List<Game> newGames = FIXTURE_MONKEY.giveMe(Game.class, 2);
+        Stream updatedStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+        
+        when(streamRepository.findById(streamId)).thenReturn(Optional.of(existingStream));
+        when(streamRepository.save(any(Stream.class))).thenReturn(updatedStream);
+
+        // When
+        Stream result = streamService.addGamesToStream(streamId, newGames);
+
+        // Then
+        assertEquals(updatedStream, result);
+        verify(streamRepository, times(1)).findById(streamId);
+        verify(streamRepository, times(1)).save(existingStream);
+    }
+
+    @Test
+    void testAddGamesToStream_ShouldReturnNullWhenStreamNotFound() {
+        // Given
+        UUID streamId = UUID.randomUUID();
+        List<Game> newGames = FIXTURE_MONKEY.giveMe(Game.class, 2);
+        when(streamRepository.findById(streamId)).thenReturn(Optional.empty());
+
+        // When
+        Stream result = streamService.addGamesToStream(streamId, newGames);
+
+        // Then
+        assertNull(result);
+        verify(streamRepository, times(1)).findById(streamId);
+        verify(streamRepository, never()).save(any());
+    }
+
+    @Test
+    void testRemoveGamesFromStream_ShouldRemoveSpecifiedGames() {
+        // Given
+        Stream existingStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+        UUID streamId = UUID.randomUUID(); // Use separate UUID to avoid null issues
+        
+        // Create games with proper IDs
+        Game game1 = new Game(UUID.randomUUID(), "Game 1", new ArrayList<>(List.of("Action")));
+        Game game2 = new Game(UUID.randomUUID(), "Game 2", new ArrayList<>(List.of("Adventure")));
+        Game game3 = new Game(UUID.randomUUID(), "Game 3", new ArrayList<>(List.of("RPG")));
+        List<Game> existingGames = new ArrayList<>(List.of(game1, game2, game3));
+        existingStream.setGames(existingGames);
+        
+        List<UUID> gameIdsToRemove = new ArrayList<>(List.of(game1.getId(), game2.getId()));
+        Stream updatedStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+        
+        when(streamRepository.findById(streamId)).thenReturn(Optional.of(existingStream));
+        when(streamRepository.save(any(Stream.class))).thenReturn(updatedStream);
+
+        // When
+        Stream result = streamService.removeGamesFromStream(streamId, gameIdsToRemove);
+
+        // Then
+        assertEquals(updatedStream, result);
+        verify(streamRepository, times(1)).findById(streamId);
+        verify(streamRepository, times(1)).save(existingStream);
+    }
+
+    @Test
+    void testRemoveGamesFromStream_ShouldReturnStreamWhenGamesIsNull() {
+        // Given
+        Stream existingStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+        UUID streamId = existingStream.getId();
+        existingStream.setGames(null);
+        
+        List<UUID> gameIdsToRemove = List.of(UUID.randomUUID());
+        
+        when(streamRepository.findById(streamId)).thenReturn(Optional.of(existingStream));
+
+        // When
+        Stream result = streamService.removeGamesFromStream(streamId, gameIdsToRemove);
+
+        // Then
+        assertEquals(existingStream, result);
+        verify(streamRepository, times(1)).findById(streamId);
+        verify(streamRepository, never()).save(any());
+    }
+
+    @Test
+    void testRemoveGamesFromStream_ShouldReturnStreamWhenStreamNotFound() {
+        // Given
+        UUID streamId = UUID.randomUUID();
+        List<UUID> gameIdsToRemove = List.of(UUID.randomUUID());
+        when(streamRepository.findById(streamId)).thenReturn(Optional.empty());
+
+        // When
+        Stream result = streamService.removeGamesFromStream(streamId, gameIdsToRemove);
+
+        // Then
+        assertNull(result);
+        verify(streamRepository, times(1)).findById(streamId);
+        verify(streamRepository, never()).save(any());
     }
 } 
