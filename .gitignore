@@ -5,3 +5,4 @@ backend/TEST_SUMMARY.md
 backend/.jqwik-database
 backend/GAME_MANAGEMENT_API.md
 frontend/package-lock.json
+backend/.editorconfig

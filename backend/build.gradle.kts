@@ -3,6 +3,8 @@ plugins {
 	id("org.springframework.boot") version "3.5.4"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("jacoco")
+	id("checkstyle")
+	id("com.github.sherter.google-java-format") version "0.9"
 }
 
 group = "com.stream_app"
@@ -68,6 +70,17 @@ tasks.jacocoTestReport {
 		xml.required.set(true)
 		html.required.set(true)
 	}
+}
+checkstyle {
+    toolVersion = "10.12.1"
+    configFile = file("config/checkstyle/checkstyle.xml")
+}
+
+tasks.withType<Checkstyle> {
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+    }
 }
 
 // Configure existing JaCoCo coverage verification - fails build if coverage is not 100%
