@@ -37,7 +37,7 @@ class GameServiceTest {
   @Test
   void testGetGames_shouldReturnAllGames() {
     // Given
-    List<Game> expectedGames = FIXTURE_MONKEY.giveMe(Game.class, 3);
+    List<Game> expectedGames = FIXTURE_MONKEY.giveMe(Game.class, SAMPLE_LIST_SIZE);
     when(gameRepository.findAll()).thenReturn(expectedGames);
 
     // When
