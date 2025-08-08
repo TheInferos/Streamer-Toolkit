@@ -74,6 +74,7 @@ tasks.jacocoTestReport {
 checkstyle {
     toolVersion = "10.12.1"
     configFile = file("config/checkstyle/checkstyle.xml")
+    maxWarnings = 0
 }
 
 tasks.withType<Checkstyle> {
@@ -81,6 +82,8 @@ tasks.withType<Checkstyle> {
         xml.required.set(false)
         html.required.set(true)
     }
+    // Fail the build if there are any Checkstyle violations
+    ignoreFailures = false
 }
 
 // Configure existing JaCoCo coverage verification - fails build if coverage is not 100%
