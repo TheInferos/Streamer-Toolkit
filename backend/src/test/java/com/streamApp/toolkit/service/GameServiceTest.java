@@ -45,7 +45,7 @@ class GameServiceTest {
 
     // Then
     assertEquals(expectedGames, result);
-    verify(gameRepository, times(2)).findAll();
+    verify(gameRepository, times(1)).findAll();
   }
 
   @Test
