@@ -55,8 +55,46 @@ dependencies {
 
 }
 
+// Configure source sets for integration tests
+sourceSets {
+    create("integration") {
+        java {
+            srcDir("src/integration/java")
+        }
+        resources {
+            srcDir("src/integration/resources")
+        }
+        compileClasspath += sourceSets["main"].output + sourceSets["test"].output
+        runtimeClasspath += sourceSets["main"].output + sourceSets["test"].output
+    }
+}
+
+// Configure integration test dependencies
+configurations {
+    getByName("integrationImplementation").extendsFrom(configurations["testImplementation"])
+    getByName("integrationRuntimeOnly").extendsFrom(configurations["testRuntimeOnly"])
+}
+
+// Create integration test task
+val integrationTest = tasks.register<Test>("integrationTest") {
+    description = "Runs integration tests."
+    group = "verification"
+    
+    testClassesDirs = sourceSets["integration"].output.classesDirs
+    classpath = sourceSets["integration"].runtimeClasspath
+    
+    useJUnitPlatform()
+    
+    shouldRunAfter("test")
+}
+
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+// Make check task depend on integration tests
+tasks.named("check") {
+    dependsOn(integrationTest)
 }
 
 // Test configuration
