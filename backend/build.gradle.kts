@@ -4,7 +4,6 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 	id("jacoco")
 	id("checkstyle")
-	id("com.github.sherter.google-java-format") version "0.9"
 }
 
 group = "com.stream_app"
@@ -55,8 +54,46 @@ dependencies {
 
 }
 
+// Configure source sets for integration tests
+sourceSets {
+    create("integration") {
+        java {
+            srcDir("src/integration/java")
+        }
+        resources {
+            srcDir("src/integration/resources")
+        }
+        compileClasspath += sourceSets["main"].output + sourceSets["test"].output
+        runtimeClasspath += sourceSets["main"].output + sourceSets["test"].output
+    }
+}
+
+// Configure integration test dependencies
+configurations {
+    getByName("integrationImplementation").extendsFrom(configurations["testImplementation"])
+    getByName("integrationRuntimeOnly").extendsFrom(configurations["testRuntimeOnly"])
+}
+
+// Create integration test task
+val integrationTest = tasks.register<Test>("integrationTest") {
+    description = "Runs integration tests."
+    group = "verification"
+    
+    testClassesDirs = sourceSets["integration"].output.classesDirs
+    classpath = sourceSets["integration"].runtimeClasspath
+    
+    useJUnitPlatform()
+    
+    shouldRunAfter("test")
+}
+
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+// Make check task depend on integration tests
+tasks.named("check") {
+    dependsOn(integrationTest)
 }
 
 // Test configuration
@@ -74,6 +111,7 @@ tasks.jacocoTestReport {
 checkstyle {
     toolVersion = "10.12.1"
     configFile = file("config/checkstyle/checkstyle.xml")
+    maxWarnings = 0
 }
 
 tasks.withType<Checkstyle> {
@@ -81,6 +119,8 @@ tasks.withType<Checkstyle> {
         xml.required.set(false)
         html.required.set(true)
     }
+    // Fail the build if there are any Checkstyle violations
+    ignoreFailures = false
 }
 
 // Configure existing JaCoCo coverage verification - fails build if coverage is not 100%
