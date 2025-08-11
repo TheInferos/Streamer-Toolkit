@@ -19,10 +19,8 @@ public class Viewer {
   @Id
   private UUID id;
 
-  @Column
   private String twitchHandle;
 
-  @Column
   private String name;
 
   @PrePersist
