@@ -4,7 +4,6 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 	id("jacoco")
 	id("checkstyle")
-	id("com.github.sherter.google-java-format") version "0.9"
 }
 
 group = "com.stream_app"
