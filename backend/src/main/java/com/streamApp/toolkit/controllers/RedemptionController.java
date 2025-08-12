@@ -52,7 +52,7 @@ public class RedemptionController extends BaseController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Redemption> updateRedemption(@PathVariable final UUID id, 
+  public ResponseEntity<Redemption> updateRedemption(@PathVariable final UUID id,
                                                      @RequestBody final Redemption redemptionDetails) {
     return redemptionService.updateRedemption(id, redemptionDetails)
         .map(ResponseEntity::ok)
@@ -81,8 +81,8 @@ public class RedemptionController extends BaseController {
   }
 
   @GetMapping("/type/{type}/completed/{completed}")
-  public ResponseEntity<List<Redemption>> getRedemptionsByTypeAndCompleted(
-      @PathVariable final RedeemTypes type, @PathVariable final Boolean completed) {
+  public ResponseEntity<List<Redemption>> getRedemptionsByTypeAndCompleted(@PathVariable final RedeemTypes type, 
+                                                                           @PathVariable final Boolean completed) {
     List<Redemption> redemptions = redemptionService.getRedemptionsByTypeAndCompleted(type, completed);
     return ResponseEntity.ok(redemptions);
   }

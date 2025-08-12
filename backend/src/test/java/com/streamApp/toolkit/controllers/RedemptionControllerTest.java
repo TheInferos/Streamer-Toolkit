@@ -119,8 +119,7 @@ class RedemptionControllerTest extends BaseControllerTest {
         .thenReturn(Optional.of(testRedemption));
 
     // When
-    ResponseEntity<Redemption> response = 
-        redemptionController.updateRedemption(testId, updateDetails);
+    ResponseEntity<Redemption> response = redemptionController.updateRedemption(testId, updateDetails);
 
     // Then
     assertEquals(testRedemption, response.getBody());
@@ -135,8 +134,7 @@ class RedemptionControllerTest extends BaseControllerTest {
         .thenReturn(Optional.empty());
 
     // When
-    ResponseEntity<Redemption> response = 
-        redemptionController.updateRedemption(testId, updateDetails);
+    ResponseEntity<Redemption> response = redemptionController.updateRedemption(testId, updateDetails);
 
     // Then
     assertNull(response.getBody());
@@ -176,8 +174,7 @@ class RedemptionControllerTest extends BaseControllerTest {
     when(redemptionService.getRedemptionsByType(RedeemTypes.GIFTED_GAME)).thenReturn(redemptions);
 
     // When
-    ResponseEntity<List<Redemption>> response = 
-        redemptionController.getRedemptionsByType(RedeemTypes.GIFTED_GAME);
+    ResponseEntity<List<Redemption>> response = redemptionController.getRedemptionsByType(RedeemTypes.GIFTED_GAME);
 
     // Then
     assertEquals(redemptions, response.getBody());
@@ -191,8 +188,7 @@ class RedemptionControllerTest extends BaseControllerTest {
     when(redemptionService.getRedemptionsByCompletedStatus(false)).thenReturn(redemptions);
 
     // When
-    ResponseEntity<List<Redemption>> response = 
-        redemptionController.getRedemptionsByCompletedStatus(false);
+    ResponseEntity<List<Redemption>> response = redemptionController.getRedemptionsByCompletedStatus(false);
 
     // Then
     assertEquals(redemptions, response.getBody());
@@ -222,8 +218,7 @@ class RedemptionControllerTest extends BaseControllerTest {
     when(redemptionService.searchRedemptionsByName("Test")).thenReturn(redemptions);
 
     // When
-    ResponseEntity<List<Redemption>> response = 
-        redemptionController.searchRedemptionsByName("Test");
+    ResponseEntity<List<Redemption>> response = redemptionController.searchRedemptionsByName("Test");
 
     // Then
     assertEquals(redemptions, response.getBody());
@@ -270,8 +265,7 @@ class RedemptionControllerTest extends BaseControllerTest {
     when(redemptionService.getRedemptionsByViewer(viewerId)).thenReturn(redemptions);
 
     // When
-    ResponseEntity<List<Redemption>> response = 
-        redemptionController.getRedemptionsByViewer(viewerId);
+    ResponseEntity<List<Redemption>> response = redemptionController.getRedemptionsByViewer(viewerId);
 
     // Then
     assertEquals(redemptions, response.getBody());
@@ -286,8 +280,7 @@ class RedemptionControllerTest extends BaseControllerTest {
     when(redemptionService.getIncompleteRedemptionsByViewer(viewerId)).thenReturn(redemptions);
 
     // When
-    ResponseEntity<List<Redemption>> response = 
-        redemptionController.getIncompleteRedemptionsByViewer(viewerId);
+    ResponseEntity<List<Redemption>> response = redemptionController.getIncompleteRedemptionsByViewer(viewerId);
 
     // Then
     assertEquals(redemptions, response.getBody());
@@ -302,8 +295,7 @@ class RedemptionControllerTest extends BaseControllerTest {
     when(redemptionService.getCompletedRedemptionsByViewer(viewerId)).thenReturn(redemptions);
 
     // When
-    ResponseEntity<List<Redemption>> response = 
-        redemptionController.getCompletedRedemptionsByViewer(viewerId);
+    ResponseEntity<List<Redemption>> response = redemptionController.getCompletedRedemptionsByViewer(viewerId);
 
     // Then
     assertEquals(redemptions, response.getBody());

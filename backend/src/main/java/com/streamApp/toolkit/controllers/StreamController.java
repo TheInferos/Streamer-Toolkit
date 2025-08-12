@@ -53,14 +53,13 @@ public class StreamController {
   }
 
   @PostMapping("/{id}/games")
-  public ResponseEntity<Stream> addGamesToStream(@PathVariable final UUID id,
-                                                 @RequestBody final List<Game> games) {
+  public ResponseEntity<Stream> addGamesToStream(@PathVariable final UUID id, @RequestBody final List<Game> games) {
     Stream updatedStream = streamService.addGamesToStream(id, games);
     return ResponseEntity.ok(updatedStream);
   }
 
   @DeleteMapping("/{id}/games")
-  public ResponseEntity<Stream> removeGamesFromStream(@PathVariable final UUID id,
+  public ResponseEntity<Stream> removeGamesFromStream(@PathVariable final UUID id, 
                                                       @RequestBody final List<UUID> gameIds) {
     Stream updatedStream = streamService.removeGamesFromStream(id, gameIds);
     return ResponseEntity.ok(updatedStream);
