@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/redemptions")
+@RequestMapping("/api/redemption")
 public class RedemptionController extends BaseController {
 
   private final RedemptionService redemptionService;
@@ -32,7 +32,7 @@ public class RedemptionController extends BaseController {
     this.redemptionService = redemptionService;
   }
 
-  @GetMapping
+  @GetMapping("/all")
   public ResponseEntity<List<Redemption>> getAllRedemptions() {
     List<Redemption> redemptions = redemptionService.getAllRedemptions();
     return ResponseEntity.ok(redemptions);
@@ -45,7 +45,7 @@ public class RedemptionController extends BaseController {
         .orElse(ResponseEntity.notFound().build());
   }
 
-  @PostMapping
+  @PostMapping("/add")
   public ResponseEntity<Redemption> createRedemption(@RequestBody final Redemption redemption) {
     Redemption createdRedemption = redemptionService.createRedemption(redemption);
     return ResponseEntity.status(HttpStatus.CREATED).body(createdRedemption);
