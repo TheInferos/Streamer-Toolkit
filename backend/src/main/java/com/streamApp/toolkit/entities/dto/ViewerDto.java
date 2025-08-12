@@ -1,4 +1,4 @@
-package com.streamApp.toolkit.dto;
+package com.streamApp.toolkit.entities.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
