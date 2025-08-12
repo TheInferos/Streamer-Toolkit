@@ -167,8 +167,7 @@ class StreamControllerTest {
         .thenReturn(updatedStream);
 
     // When
-    ResponseEntity<Stream> response = 
-        streamController.removeGamesFromStream(streamId, gameIdsToRemove);
+    ResponseEntity<Stream> response = streamController.removeGamesFromStream(streamId, gameIdsToRemove);
 
     // Then
     assertEquals(updatedStream, response.getBody());

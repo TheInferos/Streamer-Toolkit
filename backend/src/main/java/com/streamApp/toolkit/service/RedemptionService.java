@@ -60,9 +60,7 @@ public class RedemptionService {
     return redemptionRepository.findByCompleted(completed);
   }
 
-  public List<Redemption> getRedemptionsByTypeAndCompleted(
-                                                             final RedeemTypes type, 
-                                                             final Boolean completed) {
+  public List<Redemption> getRedemptionsByTypeAndCompleted(final RedeemTypes type, final Boolean completed) {
     return redemptionRepository.findByTypeAndCompleted(type, completed);
   }
 
@@ -83,9 +81,7 @@ public class RedemptionService {
     return redemptionRepository.findByViewerId(viewerId);
   }
 
-  public List<Redemption> getRedemptionsByViewerAndCompleted(
-                                                             final UUID viewerId, 
-                                                             final Boolean completed) {
+  public List<Redemption> getRedemptionsByViewerAndCompleted(final UUID viewerId, final Boolean completed) {
     return redemptionRepository.findByViewerIdAndCompleted(viewerId, completed);
   }
 
