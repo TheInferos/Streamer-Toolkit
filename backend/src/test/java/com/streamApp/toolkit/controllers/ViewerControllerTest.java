@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.streamApp.toolkit.entities.Viewer;
 import com.streamApp.toolkit.service.ViewerService;
+import com.streamApp.toolkit.testutils.TestFixtures;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +32,7 @@ class ViewerControllerTest {
   @InjectMocks
   private ViewerController viewerController;
   
-  private static FixtureMonkey FIXTURE_MONKEY = FixtureMonkey.create();
+  private static final FixtureMonkey FIXTURE_MONKEY = TestFixtures.FIXTURE_MONKEY;
 
   @Test
   void testGetViewers_shouldReturnListFromService() {
@@ -118,5 +119,36 @@ class ViewerControllerTest {
     // Then
     assertTrue(result.isEmpty());
     verify(viewerService, times(1)).getAllViewers();
+  }
+
+  @Test
+  void testUpdateViewer_shouldReturnUpdatedViewer() {
+    // Given
+    UUID viewerId = UUID.randomUUID();
+    Viewer viewerToUpdate = FIXTURE_MONKEY.giveMeOne(Viewer.class);
+    Viewer updatedViewer = FIXTURE_MONKEY.giveMeOne(Viewer.class);
+    when(viewerService.updateViewer(viewerId, viewerToUpdate)).thenReturn(updatedViewer);
+
+    // When
+    Viewer result = viewerController.updateViewer(viewerId, viewerToUpdate);
+
+    // Then
+    assertEquals(updatedViewer, result);
+    verify(viewerService, times(1)).updateViewer(viewerId, viewerToUpdate);
+  }
+
+  @Test
+  void testUpdateViewer_shouldReturnNullWhenViewerNotFound() {
+    // Given
+    UUID viewerId = UUID.randomUUID();
+    Viewer viewerToUpdate = FIXTURE_MONKEY.giveMeOne(Viewer.class);
+    when(viewerService.updateViewer(viewerId, viewerToUpdate)).thenReturn(null);
+
+    // When
+    Viewer result = viewerController.updateViewer(viewerId, viewerToUpdate);
+
+    // Then
+    assertNull(result);
+    verify(viewerService, times(1)).updateViewer(viewerId, viewerToUpdate);
   }
 } 

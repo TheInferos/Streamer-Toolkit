@@ -37,4 +37,14 @@ public class GameService {
   public Game getGameByGenre(final String genre) {
     return gameRepository.findByGenreListContaining(genre).orElse(null);
   }
+
+  public Game updateGame(final UUID id, final Game game) {
+    Game existingGame = getGame(id);
+    if (existingGame == null) {
+      return null;
+    }
+    existingGame.setName(game.getName());
+    existingGame.setGenreList(game.getGenreList());
+    return gameRepository.save(existingGame);
+  }
 } 

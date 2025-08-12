@@ -63,4 +63,14 @@ public class StreamService {
     stream.getGames().removeIf(game -> gameIds.contains(game.getId()));
     return streamRepository.save(stream);
   }
+
+  public Stream updateStream(final UUID id, final Stream stream) {
+    Stream existingStream = getStream(id);
+    if (existingStream == null) {
+      return null;
+    }
+    existingStream.setName(stream.getName());
+    existingStream.setDescription(stream.getDescription());
+    return streamRepository.save(existingStream);
+  }
 }

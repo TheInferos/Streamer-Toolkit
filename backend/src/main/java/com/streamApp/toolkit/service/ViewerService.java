@@ -29,4 +29,13 @@ public class ViewerService {
   public Viewer getViewer(final UUID id) {
     return viewerRepository.getViewer(id);
   }
+
+  public Viewer updateViewer(final UUID id, final Viewer viewer) {
+    Viewer existingViewer = getViewer(id);
+    if (existingViewer == null) {
+      return null;
+    }
+    existingViewer.setName(viewer.getName());
+    return viewerRepository.save(existingViewer);
+  }
 }

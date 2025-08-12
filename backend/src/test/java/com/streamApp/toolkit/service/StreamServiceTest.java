@@ -341,4 +341,41 @@ class StreamServiceTest {
     verify(streamRepository, times(1)).findById(streamId);
     verify(streamRepository, never()).save(any());
   }
+
+  @Test
+  void testUpdateStream_shouldReturnUpdatedStream() {
+    // Given
+    Stream existingStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+    UUID streamId = existingStream.getId();
+    Stream updateData = FIXTURE_MONKEY.giveMeBuilder(Stream.class)
+        .set("name", "Updated Stream")
+        .set("description", "Updated Description")
+        .sample();
+    
+    when(streamRepository.findById(streamId)).thenReturn(Optional.of(existingStream));
+    when(streamRepository.save(any(Stream.class))).thenReturn(existingStream);
+
+    // When
+    Stream result = streamService.updateStream(streamId, updateData);
+
+    // Then
+    assertEquals(existingStream, result);
+    verify(streamRepository).findById(streamId);
+    verify(streamRepository).save(existingStream);
+  }
+
+  @Test
+  void testUpdateStream_shouldReturnNullWhenStreamNotFound() {
+    // Given
+    UUID streamId = UUID.randomUUID();
+    Stream updateData = FIXTURE_MONKEY.giveMeOne(Stream.class);
+    when(streamRepository.findById(streamId)).thenReturn(Optional.empty());
+
+    // When
+    Stream result = streamService.updateStream(streamId, updateData);
+
+    // Then
+    assertNull(result);
+    verify(streamRepository).findById(streamId);
+  }
 } 

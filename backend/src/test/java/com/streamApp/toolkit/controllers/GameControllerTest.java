@@ -182,4 +182,35 @@ class GameControllerTest {
     assertTrue(result.isEmpty());
     verify(gameService, times(1)).getGames();
   }
+
+  @Test
+  void testUpdateGame_shouldReturnUpdatedGame() {
+    // Given
+    UUID gameId = UUID.randomUUID();
+    Game gameToUpdate = FIXTURE_MONKEY.giveMeOne(Game.class);
+    Game updatedGame = FIXTURE_MONKEY.giveMeOne(Game.class);
+    when(gameService.updateGame(gameId, gameToUpdate)).thenReturn(updatedGame);
+
+    // When
+    ResponseEntity<Game> response = gameController.updateGame(gameId, gameToUpdate);
+
+    // Then
+    assertEquals(updatedGame, response.getBody());
+    verify(gameService, times(1)).updateGame(gameId, gameToUpdate);
+  }
+
+  @Test
+  void testUpdateGame_shouldReturnNullWhenGameNotFound() {
+    // Given
+    UUID gameId = UUID.randomUUID();
+    Game gameToUpdate = FIXTURE_MONKEY.giveMeOne(Game.class);
+    when(gameService.updateGame(gameId, gameToUpdate)).thenReturn(null);
+
+    // When
+    ResponseEntity<Game> response = gameController.updateGame(gameId, gameToUpdate);
+
+    // Then
+    assertNull(response.getBody());
+    verify(gameService, times(1)).updateGame(gameId, gameToUpdate);
+  }
 } 

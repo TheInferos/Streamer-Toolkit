@@ -178,4 +178,41 @@ class GameServiceTest {
     assertTrue(result.isEmpty());
     verify(gameRepository, times(1)).findAll();
   }
+
+  @Test
+  void testUpdateGame_shouldReturnUpdatedGame() {
+    // Given
+    Game existingGame = FIXTURE_MONKEY.giveMeOne(Game.class);
+    UUID gameId = existingGame.getId();
+    Game updateData = FIXTURE_MONKEY.giveMeBuilder(Game.class)
+        .set("name", "Updated Game")
+        .set("genreList", List.of("RPG", "Strategy"))
+        .sample();
+    
+    when(gameRepository.findById(gameId)).thenReturn(Optional.of(existingGame));
+    when(gameRepository.save(any(Game.class))).thenReturn(existingGame);
+
+    // When
+    Game result = gameService.updateGame(gameId, updateData);
+
+    // Then
+    assertEquals(existingGame, result);
+    verify(gameRepository).findById(gameId);
+    verify(gameRepository).save(existingGame);
+  }
+
+  @Test
+  void testUpdateGame_shouldReturnNullWhenGameNotFound() {
+    // Given
+    UUID gameId = UUID.randomUUID();
+    Game updateData = FIXTURE_MONKEY.giveMeOne(Game.class);
+    when(gameRepository.findById(gameId)).thenReturn(Optional.empty());
+
+    // When
+    Game result = gameService.updateGame(gameId, updateData);
+
+    // Then
+    assertNull(result);
+    verify(gameRepository).findById(gameId);
+  }
 } 
