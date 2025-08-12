@@ -1,13 +1,14 @@
 package com.streamApp.toolkit.exceptions;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
 
 class RedemptionNotFoundExceptionTest {
 
   @Test
-  void testRedemptionNotFoundExceptionWithMessage_shouldCreateException() {
+  void testRedemptionNotFoundExceptionWithMessage_shouldReturnException() {
     // Given
     String message = "Redemption not found";
 
@@ -20,7 +21,7 @@ class RedemptionNotFoundExceptionTest {
   }
 
   @Test
-  void testRedemptionNotFoundExceptionWithMessageAndCause_shouldCreateException() {
+  void testRedemptionNotFoundExceptionWithMessageAndCause_shouldReturnException() {
     // Given
     String message = "Redemption not found";
     Throwable cause = new RuntimeException("Database error");
