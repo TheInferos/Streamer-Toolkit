@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.streamApp.toolkit.entities.Game;
 import com.streamApp.toolkit.service.GameService;
+import com.streamApp.toolkit.testutils.TestFixtures;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +32,7 @@ class GameControllerTest {
   @InjectMocks
   private GameController gameController;
 
-  private static FixtureMonkey FIXTURE_MONKEY = FixtureMonkey.create();
+  private static FixtureMonkey FIXTURE_MONKEY = TestFixtures.FIXTURE_MONKEY;
 
   private static final int SAMPLE_LIST_SIZE = 3;
 
