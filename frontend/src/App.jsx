@@ -5,6 +5,8 @@ import Sidebar from './components/Sidebar'
 import Games from './components/Games'
 import Streams from './components/Streams'
 import Viewers from './components/Viewers'
+import PunishmentWheel from './components/PunishmentWheel'
+
 
 function App() {
   const [currentView, setCurrentView] = useState('games')
@@ -18,6 +20,8 @@ function App() {
         return <Streams />
       case 'viewers':
         return <Viewers />
+      case 'punishment-wheel':
+        return <PunishmentWheel />
       default:
         return <Games />
     }

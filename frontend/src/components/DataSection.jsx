@@ -12,7 +12,8 @@ const DataSection = ({
   editFunction,
   deleteFunction,
   emptyStateMessage,
-  emptyStateSubmessage 
+  emptyStateSubmessage,
+  onDataChange
 }) => {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
@@ -25,12 +26,24 @@ const DataSection = ({
     fetchData()
   }, [])
 
+  // Notify parent when items change
+  useEffect(() => {
+    console.log(`DataSection ${type} items changed:`, items)
+    if (onDataChange) {
+      console.log(`DataSection ${type} calling onDataChange with:`, items)
+      onDataChange(items)
+    }
+  }, [items, onDataChange, type])
+
   const fetchData = async () => {
     try {
+      console.log(`DataSection ${type} fetching data...`)
       setLoading(true)
       const data = await fetchFunction()
+      console.log(`DataSection ${type} received data:`, data)
       setItems(data)
     } catch (err) {
+      console.error(`DataSection ${type} error:`, err)
       setError(err.message)
       console.error(`Error fetching ${type}:`, err)
     } finally {
@@ -63,6 +76,12 @@ const DataSection = ({
           status: item.status || '',
           watchTime: item.watchTime || '',
           messageCount: item.messageCount || ''
+        })
+        break
+      case 'punishment':
+        setEditForm({
+          name: item.name || '',
+          weight: item.weight || 1
         })
         break
       default:

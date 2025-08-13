@@ -92,6 +92,28 @@ const EditModal = ({
           placeholder: ''
         },
       ]
+    },
+    punishment: {
+      title: 'Edit Punishment',
+      fields: [
+        {
+          type: 'text',
+          id: 'name',
+          name: 'name',
+          label: 'Punishment Name:',
+          required: true,
+          placeholder: ''
+        },
+        {
+          type: 'number',
+          id: 'weight',
+          name: 'weight',
+          label: 'Weight:',
+          required: true,
+          placeholder: '1',
+          min: 1
+        }
+      ]
     }
   }
 

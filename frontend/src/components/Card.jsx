@@ -42,6 +42,17 @@ const Card = ({
       ],
       primaryAction: 'Edit',
       secondaryAction: 'View Profile'
+    },
+    punishment: {
+      title: item.name,
+      subtitle: null,
+      status: null,
+      details: [
+        { label: 'Weight', value: item.weight || 1 },
+        { label: 'ID', value: item.id }
+      ],
+      primaryAction: 'Edit',
+      secondaryAction: 'View Details'
     }
   }
 
