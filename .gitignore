@@ -6,3 +6,4 @@ backend/.jqwik-database
 backend/GAME_MANAGEMENT_API.md
 frontend/package-lock.json
 backend/.editorconfig
+frontend/src/styles/README.md

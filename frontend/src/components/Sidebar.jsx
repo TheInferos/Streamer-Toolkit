@@ -5,6 +5,8 @@ const Sidebar = ({ isOpen, currentView, setCurrentView }) => {
     { id: 'games', label: 'Games', icon: '🎮' },
     { id: 'streams', label: 'Streams', icon: '📹' },
     { id: 'viewers', label: 'Viewers', icon: '👥' },
+    { id: 'punishment-wheel', label: 'Punishment Wheel', icon: '⛓️' },
+
   ]
 
   return (

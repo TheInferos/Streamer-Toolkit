@@ -33,10 +33,13 @@ const AddModal = ({
         }
       case 'viewer':
         return {
-          username: '',
-          status: '',
-          watchTime: '',
-          messageCount: ''
+          name: '',
+          twitchHandle: ''
+        }
+      case 'punishment':
+        return {
+          name: '',
+          weight: 1
         }
       default:
         return {}
@@ -91,6 +94,11 @@ const AddModal = ({
           { name: 'status', label: 'Status', type: 'text' },
           { name: 'watchTime', label: 'Watch Time', type: 'text' },
           { name: 'messageCount', label: 'Message Count', type: 'number' }
+        ]
+      case 'punishment':
+        return [
+          { name: 'name', label: 'Punishment Name', type: 'text', required: true },
+          { name: 'weight', label: 'Weight', type: 'number', required: true, min: 1 }
         ]
       default:
         return []
