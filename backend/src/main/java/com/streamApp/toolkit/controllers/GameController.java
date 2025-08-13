@@ -5,9 +5,11 @@ import com.streamApp.toolkit.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,5 +57,17 @@ public class GameController {
   public ResponseEntity<Game> getGameByGenre(@RequestParam final String genre) {
     Game game = gameService.getGameByGenre(genre);
     return ResponseEntity.ok(game);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<Game> updateGame(@PathVariable final UUID id, @RequestBody final Game game) {
+    Game updatedGame = gameService.updateGame(id, game);
+    return ResponseEntity.ok(updatedGame);
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteGame(@PathVariable final UUID id) {
+    gameService.deleteGame(id);
+    return ResponseEntity.noContent().build();
   }
 } 

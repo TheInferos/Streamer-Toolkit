@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,5 +64,17 @@ public class StreamController {
                                                       @RequestBody final List<UUID> gameIds) {
     Stream updatedStream = streamService.removeGamesFromStream(id, gameIds);
     return ResponseEntity.ok(updatedStream);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<Stream> updateStream(@PathVariable final UUID id, @RequestBody final Stream stream) {
+    Stream updatedStream = streamService.updateStream(id, stream);
+    return ResponseEntity.ok(updatedStream);
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteStream(@PathVariable final UUID id) {
+    streamService.deleteStream(id);
+    return ResponseEntity.noContent().build();
   }
 }

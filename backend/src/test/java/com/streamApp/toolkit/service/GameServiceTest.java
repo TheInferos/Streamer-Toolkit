@@ -178,4 +178,72 @@ class GameServiceTest {
     assertTrue(result.isEmpty());
     verify(gameRepository, times(1)).findAll();
   }
+
+  @Test
+  void testUpdateGame_shouldReturnUpdatedGame() {
+    // Given
+    Game existingGame = FIXTURE_MONKEY.giveMeOne(Game.class);
+    UUID gameId = existingGame.getId();
+    Game updateData = FIXTURE_MONKEY.giveMeBuilder(Game.class)
+        .set("name", "Updated Game")
+        .set("genreList", List.of("RPG", "Strategy"))
+        .sample();
+    
+    when(gameRepository.findById(gameId)).thenReturn(Optional.of(existingGame));
+    when(gameRepository.save(any(Game.class))).thenReturn(existingGame);
+
+    // When
+    Game result = gameService.updateGame(gameId, updateData);
+
+    // Then
+    assertEquals(existingGame, result);
+    verify(gameRepository).findById(gameId);
+    verify(gameRepository).save(existingGame);
+  }
+
+  @Test
+  void testUpdateGame_shouldReturnNullWhenGameNotFound() {
+    // Given
+    UUID gameId = UUID.randomUUID();
+    Game updateData = FIXTURE_MONKEY.giveMeOne(Game.class);
+    when(gameRepository.findById(gameId)).thenReturn(Optional.empty());
+
+    // When
+    Game result = gameService.updateGame(gameId, updateData);
+
+    // Then
+    assertNull(result);
+    verify(gameRepository).findById(gameId);
+  }
+
+  @Test
+  void testDeleteGame_shouldReturnTrueWhenSuccessful() {
+    // Given
+    UUID gameId = UUID.randomUUID();
+    Game existingGame = FIXTURE_MONKEY.giveMeOne(Game.class);
+    when(gameRepository.findById(gameId)).thenReturn(Optional.of(existingGame));
+
+    // When
+    boolean result = gameService.deleteGame(gameId);
+
+    // Then
+    assertTrue(result);
+    verify(gameRepository, times(1)).findById(gameId);
+    verify(gameRepository, times(1)).deleteById(gameId);
+  }
+
+  @Test
+  void testDeleteGame_shouldReturnFalseWhenGameNotFound() {
+    // Given
+    UUID gameId = UUID.randomUUID();
+    when(gameRepository.findById(gameId)).thenReturn(Optional.empty());
+
+    // When
+    boolean result = gameService.deleteGame(gameId);
+
+    // Then
+    assertTrue(!result);
+    verify(gameRepository, times(1)).findById(gameId);
+    verify(gameRepository, times(0)).deleteById(gameId);
+  }
 } 

@@ -206,4 +206,71 @@ class ViewerServiceTest {
     assertNull(result);
     verify(viewerRepository, times(1)).getViewer(null);
   }
+
+  @Test
+  void testUpdateViewer_shouldReturnUpdatedViewer() {
+    // Given
+    Viewer existingViewer = FIXTURE_MONKEY.giveMeOne(Viewer.class);
+    UUID viewerId = existingViewer.getId();
+    Viewer updateData = FIXTURE_MONKEY.giveMeBuilder(Viewer.class)
+        .set("name", "Updated Viewer")
+        .sample();
+    
+    when(viewerRepository.getViewer(viewerId)).thenReturn(existingViewer);
+    when(viewerRepository.save(any(Viewer.class))).thenReturn(existingViewer);
+
+    // When
+    Viewer result = viewerService.updateViewer(viewerId, updateData);
+
+    // Then
+    assertEquals(existingViewer, result);
+    verify(viewerRepository).getViewer(viewerId);
+    verify(viewerRepository).save(existingViewer);
+  }
+
+  @Test
+  void testUpdateViewer_shouldReturnNullWhenViewerNotFound() {
+    // Given
+    UUID viewerId = UUID.randomUUID();
+    Viewer updateData = FIXTURE_MONKEY.giveMeOne(Viewer.class);
+    when(viewerRepository.getViewer(viewerId)).thenReturn(null);
+
+    // When
+    Viewer result = viewerService.updateViewer(viewerId, updateData);
+
+    // Then
+    assertNull(result);
+    verify(viewerRepository).getViewer(viewerId);
+  }
+
+  @Test
+  void testDeleteViewer_shouldReturnTrueWhenSuccessful() {
+    // Given
+    UUID viewerId = UUID.randomUUID();
+    Viewer existingViewer = FIXTURE_MONKEY.giveMeOne(Viewer.class);
+    when(viewerRepository.getViewer(viewerId)).thenReturn(existingViewer);
+
+    // When
+    boolean result = viewerService.deleteViewer(viewerId);
+
+    // Then
+    assertTrue(result);
+    verify(viewerRepository, times(1)).getViewer(viewerId);
+    verify(viewerRepository, times(1)).deleteById(viewerId);
+  }
+
+  @Test
+  void testDeleteViewer_shouldReturnFalseWhenViewerNotFound() {
+    // Given
+    UUID viewerId = UUID.randomUUID();
+    when(viewerRepository.getViewer(viewerId)).thenReturn(null);
+
+    // When
+    boolean result = viewerService.deleteViewer(viewerId);
+
+    // Then
+    assertTrue(!result);
+    verify(viewerRepository, times(1)).getViewer(viewerId);
+    verify(viewerRepository, times(0)).deleteById(viewerId);
+  }
 }
