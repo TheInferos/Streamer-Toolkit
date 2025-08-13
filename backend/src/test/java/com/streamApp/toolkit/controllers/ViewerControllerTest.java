@@ -34,6 +34,8 @@ class ViewerControllerTest {
   
   private static final FixtureMonkey FIXTURE_MONKEY = TestFixtures.FIXTURE_MONKEY;
 
+  private static final int NO_CONTENT_STATUS_CODE = 204;
+
   @Test
   void testGetViewers_shouldReturnListFromService() {
     // Given
@@ -150,5 +152,33 @@ class ViewerControllerTest {
     // Then
     assertNull(result);
     verify(viewerService, times(1)).updateViewer(viewerId, viewerToUpdate);
+  }
+
+  @Test
+  void testDeleteViewer_shouldReturnNoContentWhenSuccessful() {
+    // Given
+    UUID viewerId = UUID.randomUUID();
+    when(viewerService.deleteViewer(viewerId)).thenReturn(true);
+
+    // When
+    var result = viewerController.deleteViewer(viewerId);
+
+    // Then
+    assertEquals(NO_CONTENT_STATUS_CODE, result.getStatusCode().value());
+    verify(viewerService, times(1)).deleteViewer(viewerId);
+  }
+
+  @Test
+  void testDeleteViewer_shouldReturnNoContentWhenViewerNotFound() {
+    // Given
+    UUID viewerId = UUID.randomUUID();
+    when(viewerService.deleteViewer(viewerId)).thenReturn(false);
+
+    // When
+    var result = viewerController.deleteViewer(viewerId);
+
+    // Then
+    assertEquals(NO_CONTENT_STATUS_CODE, result.getStatusCode().value());
+    verify(viewerService, times(1)).deleteViewer(viewerId);
   }
 } 

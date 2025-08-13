@@ -38,4 +38,12 @@ public class ViewerService {
     existingViewer.setName(viewer.getName());
     return viewerRepository.save(existingViewer);
   }
+
+  public boolean deleteViewer(final UUID id) {
+    if (getViewer(id) == null) {
+      return false;
+    }
+    viewerRepository.deleteById(id);
+    return true;
+  }
 }

@@ -47,4 +47,12 @@ public class GameService {
     existingGame.setGenreList(game.getGenreList());
     return gameRepository.save(existingGame);
   }
+
+  public boolean deleteGame(final UUID id) {
+    if (getGame(id) == null) {
+      return false;
+    }
+    gameRepository.deleteById(id);
+    return true;
+  }
 } 

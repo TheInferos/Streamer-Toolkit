@@ -36,6 +36,8 @@ class GameControllerTest {
 
   private static final int SAMPLE_LIST_SIZE = 3;
 
+  private static final int NO_CONTENT_STATUS_CODE = 204;
+
   @Test
   void testGetGames_shouldReturnListFromService() {
     // Given
@@ -212,5 +214,33 @@ class GameControllerTest {
     // Then
     assertNull(response.getBody());
     verify(gameService, times(1)).updateGame(gameId, gameToUpdate);
+  }
+
+  @Test
+  void testDeleteGame_shouldReturnNoContentWhenSuccessful() {
+    // Given
+    UUID gameId = UUID.randomUUID();
+    when(gameService.deleteGame(gameId)).thenReturn(true);
+
+    // When
+    var result = gameController.deleteGame(gameId);
+
+    // Then
+    assertEquals(NO_CONTENT_STATUS_CODE, result.getStatusCode().value());
+    verify(gameService, times(1)).deleteGame(gameId);
+  }
+
+  @Test
+  void testDeleteGame_shouldReturnNoContentWhenGameNotFound() {
+    // Given
+    UUID gameId = UUID.randomUUID();
+    when(gameService.deleteGame(gameId)).thenReturn(false);
+
+    // When
+    var result = gameController.deleteGame(gameId);
+
+    // Then
+    assertEquals(NO_CONTENT_STATUS_CODE, result.getStatusCode().value());
+    verify(gameService, times(1)).deleteGame(gameId);
   }
 } 

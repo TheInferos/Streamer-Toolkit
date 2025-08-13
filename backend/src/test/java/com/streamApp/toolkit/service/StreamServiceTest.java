@@ -378,4 +378,35 @@ class StreamServiceTest {
     assertNull(result);
     verify(streamRepository).findById(streamId);
   }
+
+  @Test
+  void testDeleteStream_shouldReturnTrueWhenSuccessful() {
+    // Given
+    UUID streamId = UUID.randomUUID();
+    Stream existingStream = FIXTURE_MONKEY.giveMeOne(Stream.class);
+    when(streamRepository.findById(streamId)).thenReturn(Optional.of(existingStream));
+
+    // When
+    boolean result = streamService.deleteStream(streamId);
+
+    // Then
+    assertTrue(result);
+    verify(streamRepository, times(1)).findById(streamId);
+    verify(streamRepository, times(1)).deleteById(streamId);
+  }
+
+  @Test
+  void testDeleteStream_shouldReturnFalseWhenStreamNotFound() {
+    // Given
+    UUID streamId = UUID.randomUUID();
+    when(streamRepository.findById(streamId)).thenReturn(Optional.empty());
+
+    // When
+    boolean result = streamService.deleteStream(streamId);
+
+    // Then
+    assertTrue(!result);
+    verify(streamRepository, times(1)).findById(streamId);
+    verify(streamRepository, times(0)).deleteById(streamId);
+  }
 } 

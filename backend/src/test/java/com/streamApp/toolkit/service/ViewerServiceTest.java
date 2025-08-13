@@ -242,4 +242,35 @@ class ViewerServiceTest {
     assertNull(result);
     verify(viewerRepository).getViewer(viewerId);
   }
+
+  @Test
+  void testDeleteViewer_shouldReturnTrueWhenSuccessful() {
+    // Given
+    UUID viewerId = UUID.randomUUID();
+    Viewer existingViewer = FIXTURE_MONKEY.giveMeOne(Viewer.class);
+    when(viewerRepository.getViewer(viewerId)).thenReturn(existingViewer);
+
+    // When
+    boolean result = viewerService.deleteViewer(viewerId);
+
+    // Then
+    assertTrue(result);
+    verify(viewerRepository, times(1)).getViewer(viewerId);
+    verify(viewerRepository, times(1)).deleteById(viewerId);
+  }
+
+  @Test
+  void testDeleteViewer_shouldReturnFalseWhenViewerNotFound() {
+    // Given
+    UUID viewerId = UUID.randomUUID();
+    when(viewerRepository.getViewer(viewerId)).thenReturn(null);
+
+    // When
+    boolean result = viewerService.deleteViewer(viewerId);
+
+    // Then
+    assertTrue(!result);
+    verify(viewerRepository, times(1)).getViewer(viewerId);
+    verify(viewerRepository, times(0)).deleteById(viewerId);
+  }
 }

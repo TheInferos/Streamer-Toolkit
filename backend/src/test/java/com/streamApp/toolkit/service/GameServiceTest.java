@@ -215,4 +215,35 @@ class GameServiceTest {
     assertNull(result);
     verify(gameRepository).findById(gameId);
   }
+
+  @Test
+  void testDeleteGame_shouldReturnTrueWhenSuccessful() {
+    // Given
+    UUID gameId = UUID.randomUUID();
+    Game existingGame = FIXTURE_MONKEY.giveMeOne(Game.class);
+    when(gameRepository.findById(gameId)).thenReturn(Optional.of(existingGame));
+
+    // When
+    boolean result = gameService.deleteGame(gameId);
+
+    // Then
+    assertTrue(result);
+    verify(gameRepository, times(1)).findById(gameId);
+    verify(gameRepository, times(1)).deleteById(gameId);
+  }
+
+  @Test
+  void testDeleteGame_shouldReturnFalseWhenGameNotFound() {
+    // Given
+    UUID gameId = UUID.randomUUID();
+    when(gameRepository.findById(gameId)).thenReturn(Optional.empty());
+
+    // When
+    boolean result = gameService.deleteGame(gameId);
+
+    // Then
+    assertTrue(!result);
+    verify(gameRepository, times(1)).findById(gameId);
+    verify(gameRepository, times(0)).deleteById(gameId);
+  }
 } 

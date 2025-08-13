@@ -73,4 +73,12 @@ public class StreamService {
     existingStream.setDescription(stream.getDescription());
     return streamRepository.save(existingStream);
   }
+
+  public boolean deleteStream(final UUID id) {
+    if (getStream(id) == null) {
+      return false;
+    }
+    streamRepository.deleteById(id);
+    return true;
+  }
 }

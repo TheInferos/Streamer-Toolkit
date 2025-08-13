@@ -71,4 +71,10 @@ public class StreamController {
     Stream updatedStream = streamService.updateStream(id, stream);
     return ResponseEntity.ok(updatedStream);
   }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteStream(@PathVariable final UUID id) {
+    streamService.deleteStream(id);
+    return ResponseEntity.noContent().build();
+  }
 }

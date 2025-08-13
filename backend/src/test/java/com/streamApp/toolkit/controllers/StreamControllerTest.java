@@ -35,6 +35,8 @@ class StreamControllerTest {
 
   private static final int SAMPLE_LIST_SIZE = 3;
 
+  private static final int NO_CONTENT_STATUS_CODE = 204;
+
   private static FixtureMonkey FIXTURE_MONKEY = TestFixtures.FIXTURE_MONKEY;
 
   @Test
@@ -204,5 +206,33 @@ class StreamControllerTest {
     // Then
     assertNull(response.getBody());
     verify(streamService, times(1)).updateStream(streamId, streamToUpdate);
+  }
+
+  @Test
+  void testDeleteStream_shouldReturnNoContentWhenSuccessful() {
+    // Given
+    UUID streamId = UUID.randomUUID();
+    when(streamService.deleteStream(streamId)).thenReturn(true);
+
+    // When
+    var result = streamController.deleteStream(streamId);
+
+    // Then
+    assertEquals(NO_CONTENT_STATUS_CODE, result.getStatusCode().value());
+    verify(streamService, times(1)).deleteStream(streamId);
+  }
+
+  @Test
+  void testDeleteStream_shouldReturnNoContentWhenStreamNotFound() {
+    // Given
+    UUID streamId = UUID.randomUUID();
+    when(streamService.deleteStream(streamId)).thenReturn(false);
+
+    // When
+    var result = streamController.deleteStream(streamId);
+
+    // Then
+    assertEquals(NO_CONTENT_STATUS_CODE, result.getStatusCode().value());
+    verify(streamService, times(1)).deleteStream(streamId);
   }
 }
