@@ -10,13 +10,27 @@
 
 .wheel-container {
   position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
   margin: 2rem 0;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.wheel-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 400px;
 }
 
 .wheel {
-  width: 300px;
-  height: 300px;
+  width: 400px;
+  height: 400px;
   border-radius: 50%;
   position: relative;
   border: 8px solid #e2e8f0;
@@ -184,4 +198,57 @@
   background: #f8fafc;
   border-radius: 0.5rem;
   border: 1px solid #e2e8f0;
+}
+
+/* Legend Styles */
+.wheel-legend {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  min-width: 120px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.wheel-legend h4 {
+  margin: 0 0 0.375rem 0;
+  color: #1e293b;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding: 0.125rem;
+  border-radius: 0.25rem;
+  background: #f8fafc;
+}
+
+.legend-color {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.legend-name {
+  flex: 1;
+  font-size: 0.625rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.legend-percentage {
+  font-size: 0.625rem;
+  color: #6b7280;
+  font-weight: 600;
+  min-width: 30px;
+  text-align: right;
 }

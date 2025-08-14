@@ -198,7 +198,7 @@ export const punishmentsAPI = {
   update: async (punishmentData) => {
     try {
       console.log('Updating punishment:', punishmentData)
-      const response = await fetch(`http://localhost:8080/api/punishment/update/${punishmentData.id}`, {
+      const response = await fetch(`http://localhost:8080/api/punishment/${punishmentData.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ export const punishmentsAPI = {
   delete: async (id) => {
     try {
       console.log('Deleting punishment:', id)
-      const response = await fetch(`http://localhost:8080/api/punishment/delete/${id}`, {
+      const response = await fetch(`http://localhost:8080/api/punishment/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

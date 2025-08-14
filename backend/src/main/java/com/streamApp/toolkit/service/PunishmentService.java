@@ -29,4 +29,22 @@ public class PunishmentService {
   public List<Punishment> getAllPunishments() {
     return punishmentRepository.findAll();
   }
+
+  public Punishment updatePunishment(final UUID id, final Punishment punishment) {
+    return punishmentRepository.findById(id)
+        .map(existingPunishment -> {
+          existingPunishment.setName(punishment.getName());
+          existingPunishment.setWeight(punishment.getWeight());
+          return punishmentRepository.save(existingPunishment);
+        })
+        .orElse(null);
+  }
+
+  public boolean deletePunishment(final UUID id) {
+    if (getPunishment(id) == null) {
+      return false;
+    }
+    punishmentRepository.deleteById(id);
+    return true;
+  }
 }

@@ -94,4 +94,58 @@ class PunishmentControllerTest {
     assertEquals(0, response.getBody().size());
     verify(punishmentService).getAllPunishments();
   }
+
+  @Test
+  void testUpdatePunishment_shouldReturnPunishmentResponse() {
+    // Given
+    Punishment updatedPunishment = FIXTURE_MONKEY.giveMeBuilder(Punishment.class)
+        .set("id", testId)
+        .set("name", "Updated Name")
+        .set("weight", 10)
+        .sample();
+    when(punishmentService.updatePunishment(testId, updatedPunishment)).thenReturn(updatedPunishment);
+
+    // When
+    ResponseEntity<Punishment> response = punishmentController.updatePunishment(testId, updatedPunishment);
+
+    assertEquals(updatedPunishment, response.getBody());
+    verify(punishmentService).updatePunishment(testId, updatedPunishment);
+  }
+
+  @Test
+  void testUpdatePunishment_shouldReturnNotFoundResponse() {
+    // Given
+    UUID nonExistentId = UUID.randomUUID();
+    when(punishmentService.updatePunishment(nonExistentId, testPunishment)).thenReturn(null);
+
+    // When
+    ResponseEntity<Punishment> response = punishmentController.updatePunishment(nonExistentId, testPunishment);
+
+    assertEquals(404, response.getStatusCode().value());
+    verify(punishmentService).updatePunishment(nonExistentId, testPunishment);
+  }
+
+  @Test
+  void testDeletePunishment_shouldReturnNoContentResponse() {
+    // Given
+    when(punishmentService.deletePunishment(testId)).thenReturn(true);
+
+    // When
+    ResponseEntity<Void> response = punishmentController.deletePunishment(testId);
+
+    assertEquals(204, response.getStatusCode().value());
+    verify(punishmentService).deletePunishment(testId);
+  }
+
+  @Test
+  void testDeletePunishment_shouldReturnNotFoundResponse() {
+    // Given
+    when(punishmentService.deletePunishment(testId)).thenReturn(false);
+
+    // When
+    ResponseEntity<Void> response = punishmentController.deletePunishment(testId);
+
+    assertEquals(404, response.getStatusCode().value());
+    verify(punishmentService).deletePunishment(testId);
+  }
 }

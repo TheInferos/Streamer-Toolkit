@@ -10,7 +10,7 @@
 @import './styles/forms.css';
 @import './styles/modals.css';
 @import './styles/cards.css';
-@import './styles/punishment-wheel.css';
+@import './styles/wheel.css';
 
 /* Responsive design last */
 @import './styles/responsive.css';

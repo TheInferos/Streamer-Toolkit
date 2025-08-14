@@ -3,8 +3,7 @@ import React from 'react'
 const Card = ({ 
   item, 
   type, 
-  onEditClick, 
-  onViewDetails 
+  onEditClick
 }) => {
   // Configuration for different card types
   const cardConfig = {
@@ -18,8 +17,7 @@ const Card = ({
         { label: 'Description', value: item.description, conditional: true },
         { label: 'Tags', value: item.tags?.join(', ') || 'None' }
       ],
-      primaryAction: 'Edit',
-      secondaryAction: 'View Details'
+      primaryAction: 'Edit'
     },
     game: {
       title: item.name,
@@ -30,8 +28,7 @@ const Card = ({
         { label: 'Genre', value: item.genreList?.join(', ') || 'None' },
         { label: 'Description', value: item.description, conditional: true }
       ],
-      primaryAction: 'Edit',
-      secondaryAction: 'View Details'
+      primaryAction: 'Edit'
     },
     viewer: {
       title: item.twitchHandle,
@@ -40,8 +37,7 @@ const Card = ({
       details: [
         { label: 'Name', value: item.name },
       ],
-      primaryAction: 'Edit',
-      secondaryAction: 'View Profile'
+      primaryAction: 'Edit'
     },
     punishment: {
       title: item.name,
@@ -49,10 +45,8 @@ const Card = ({
       status: null,
       details: [
         { label: 'Weight', value: item.weight || 1 },
-        { label: 'ID', value: item.id }
       ],
-      primaryAction: 'Edit',
-      secondaryAction: 'View Details'
+      primaryAction: 'Edit'
     }
   }
 
@@ -65,11 +59,7 @@ const Card = ({
     }
   }
 
-  const handleViewDetails = () => {
-    if (onViewDetails) {
-      onViewDetails(item)
-    }
-  }
+
 
   return (
     <div className={cardClass}>
@@ -114,9 +104,6 @@ const Card = ({
       <div className={`${type}-actions`}>
         <button onClick={handleEditClick} className="btn primary">
           {config.primaryAction}
-        </button>
-        <button onClick={handleViewDetails} className="btn secondary">
-          {config.secondaryAction}
         </button>
       </div>
     </div>

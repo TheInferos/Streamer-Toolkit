@@ -143,13 +143,16 @@ const AddModal = ({
             ))}
           </div>
           
-          <div className="modal-footer">
-            <button type="button" onClick={onClose} className="btn secondary">
-              Cancel
-            </button>
-            <button type="submit" className="btn primary">
-              Add {type.charAt(0).toUpperCase() + type.slice(1)}
-            </button>
+          <div className="form-actions">
+            <div></div>
+            <div className="right-buttons">
+              <button type="button" onClick={onClose} className="btn secondary">
+                Cancel
+              </button>
+              <button type="submit" className="btn primary">
+                Add {type.charAt(0).toUpperCase() + type.slice(1)}
+              </button>
+            </div>
           </div>
         </form>
       </div>
